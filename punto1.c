@@ -10,6 +10,7 @@ int Duracion; // entre 10 – 100
 }typedef tarea;
 
 void cargarTareas(tarea **listaTareas, int cantTareas);
+void escribirTarea(tarea **lista, int cantTareas);
 void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas);
 
 
@@ -57,11 +58,11 @@ void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas
 
     for (int i = 0; i < cantTareas; i++)
     {
-        printf("Tarea numero %d\n",(*(listaTareas+i))->TareaID);
-        puts("-----------Descripcion-----------");
+        printf("----------Tarea numero %d----------\n",(*(listaTareas+i))->TareaID);
+        puts("-----------Descripcion-----------\n");
         puts((*(listaTareas+i))->Descripcion);
-        puts("-----------Duracion-----------");
-        printf("-----------%d-----------\n",(*(listaTareas+i))->Duracion);
+        printf("Duracion: %d\n",(*(listaTareas+i))->Duracion);
+        puts("-----------------------------------------");
         puts("Esta tarea esta realizada? [1]Si, [0]No");
         scanf("%d",&completada);
 
@@ -79,34 +80,25 @@ void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas
         }
         
     }
+    puts("-------------TAREAS REALIZADAS-------------\n");
+    escribirTarea(tareasRealizadas,cantTareas);
 
-//Tareas Realizadas
-    puts("-------------TAREAS REALIZADAS-------------");
+    puts("-------------TAREAS SIN REALIZAR-------------\n");
+    escribirTarea(listaTareas,cantTareas);
+}
+
+void escribirTarea(tarea **lista, int cantTareas){
     for (int i = 0; i < cantTareas; i++)
     {
-        if (*(tareasRealizadas + i) != NULL)
+        if (*(lista+i)!=NULL)
         {
-            printf("Tarea numero %d\n",(*(tareasRealizadas+i))->TareaID);
-            puts("-----------Descripcion-----------");
-            puts((*(tareasRealizadas+i))->Descripcion);
-            puts("-----------Duracion-----------");
-            printf("-----------%d-----------\n",(*(tareasRealizadas+i))->Duracion);
+            printf("----------Tarea numero %d----------\n",(*(lista+i))->TareaID);
+            puts("-----------Descripcion-----------\n");
+            puts((*(lista+i))->Descripcion);
+            printf("Duracion: %d\n",(*(lista+i))->Duracion);
+            puts("-----------------------------------------");
         }
+        
     }
-
-    puts("-------------TAREAS SIN REALIZAR-------------");
-    for (int i = 0; i < cantTareas; i++)
-    {
-        if (*(listaTareas + i) != NULL)
-        {
-            printf("Tarea numero %d\n",(*(listaTareas+i))->TareaID);
-            puts("-----------Descripcion-----------");
-            puts((*(listaTareas+i))->Descripcion);
-            puts("-----------Duracion-----------");
-            printf("-----------%d-----------\n",(*(listaTareas+i))->Duracion);
-        }
-    }
-    
-    
     
 }
