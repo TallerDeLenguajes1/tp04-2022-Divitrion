@@ -55,7 +55,7 @@ void cargarTareas(tarea **listaTareas, int cantTareas){
 void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas){
 
     int completada;
-
+    system("cls");
     for (int i = 0; i < cantTareas; i++)
     {
         printf("----------Tarea numero %d----------\n",(*(listaTareas+i))->TareaID);
