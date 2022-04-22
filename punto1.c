@@ -10,14 +10,15 @@ int Duracion; // entre 10 – 100
 }typedef tarea;
 
 void cargarTareas(tarea **listaTareas, int cantTareas);
-void escribirTarea(tarea **lista, int cantTareas);
+void escribirTarea(tarea *lista);
 void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas);
+tarea* buscarTarea (tarea **listaRealizada,tarea **listaSinRealizar, int cantTareas,int id);
 
 
 int main()
 {
     srand(time(NULL));
-    int cantTareas;
+    int cantTareas,id;
     tarea **listaTareas, **tareasRealizadas;
 
     puts("Ingrese la cantidad de tareas");
@@ -28,6 +29,9 @@ int main()
     
     cargarTareas(listaTareas,cantTareas);
     mostrarTareas(listaTareas,cantTareas,tareasRealizadas);
+    puts("Que id desea buscar");
+    scanf("%d",&id);
+    escribirTarea(buscarTarea(tareasRealizadas,listaTareas,cantTareas,id));
 
     getchar();
 
@@ -58,11 +62,7 @@ void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas
     system("cls");
     for (int i = 0; i < cantTareas; i++)
     {
-        printf("----------Tarea numero %d----------\n",(*(listaTareas+i))->TareaID);
-        puts("-----------Descripcion-----------\n");
-        puts((*(listaTareas+i))->Descripcion);
-        printf("Duracion: %d\n",(*(listaTareas+i))->Duracion);
-        puts("-----------------------------------------");
+        escribirTarea(*(listaTareas+i));
         puts("Esta tarea esta realizada? [1]Si, [0]No");
         scanf("%d",&completada);
 
@@ -81,24 +81,45 @@ void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas
         
     }
     puts("-------------TAREAS REALIZADAS-------------\n");
-    escribirTarea(tareasRealizadas,cantTareas);
-
-    puts("-------------TAREAS SIN REALIZAR-------------\n");
-    escribirTarea(listaTareas,cantTareas);
-}
-
-void escribirTarea(tarea **lista, int cantTareas){
     for (int i = 0; i < cantTareas; i++)
     {
-        if (*(lista+i)!=NULL)
-        {
-            printf("----------Tarea numero %d----------\n",(*(lista+i))->TareaID);
-            puts("-----------Descripcion-----------\n");
-            puts((*(lista+i))->Descripcion);
-            printf("Duracion: %d\n",(*(lista+i))->Duracion);
-            puts("-----------------------------------------");
-        }
-        
+        escribirTarea(*((tareasRealizadas+i)));
     }
     
+
+    puts("-------------TAREAS SIN REALIZAR-------------\n");
+    for (int i = 0; i < cantTareas; i++)
+    {
+        escribirTarea(*((listaTareas+i)));
+    }
+}
+
+void escribirTarea(tarea *lista){
+    if (lista!=NULL)
+    {
+        printf("----------Tarea numero %d----------\n",lista->TareaID);
+        puts("-----------Descripcion-----------\n");
+        puts(lista->Descripcion);
+        printf("Duracion: %d\n",lista->Duracion);
+        puts("-----------------------------------------");
+    }    
+}
+
+tarea* buscarTarea (tarea **listaRealizada,tarea **listaSinRealizar, int cantTareas,int id){
+
+    if (listaRealizada!=NULL || listaSinRealizar!=NULL)
+    {
+        for (int i = 0; i < cantTareas; i++)
+        {
+            if ((*(listaRealizada+i))->TareaID=id)
+            {
+                return(*(listaRealizada+i));
+            }
+            if ((*(listaSinRealizar+i))->TareaID=id)
+            {
+               return(*(listaSinRealizar+i));
+            }
+            
+        }
+    }
 }
