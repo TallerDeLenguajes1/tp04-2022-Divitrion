@@ -12,7 +12,8 @@ int Duracion; // entre 10 – 100
 void cargarTareas(tarea **listaTareas, int cantTareas);
 void escribirTarea(tarea *lista);
 void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas);
-tarea* buscarTarea (tarea **listaRealizada,tarea **listaSinRealizar, int cantTareas,int id);
+tarea* buscarPorID (tarea **listaRealizada,tarea **listaSinRealizar, int cantTareas);
+tarea* BuscarPorPalabra(tarea **listaRealizada, tarea **listaSinRealizar, int cantTareas);
 
 
 int main()
@@ -29,9 +30,8 @@ int main()
     
     cargarTareas(listaTareas,cantTareas);
     mostrarTareas(listaTareas,cantTareas,tareasRealizadas);
-    puts("Que id desea buscar");
-    scanf("%d",&id);
-    escribirTarea(buscarTarea(tareasRealizadas,listaTareas,cantTareas,id));
+    escribirTarea(buscarPorID(tareasRealizadas,listaTareas,cantTareas));
+    escribirTarea(buscarPorPalabra(tareasRealizadas,listaTareas,cantTareas));
 
     getchar();
 
@@ -59,7 +59,6 @@ void cargarTareas(tarea **listaTareas, int cantTareas){
 void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas){
 
     int completada;
-    system("cls");
     for (int i = 0; i < cantTareas; i++)
     {
         escribirTarea(*(listaTareas+i));
@@ -105,8 +104,44 @@ void escribirTarea(tarea *lista){
     }    
 }
 
-tarea* buscarTarea (tarea **listaRealizada,tarea **listaSinRealizar, int cantTareas,int id){
 
+tarea* buscarPorPalabra(tarea **listaRealizada, tarea **listaSinRealizar, int cantTareas)
+{
+    char *buff=(char *) malloc(100*sizeof(char));
+
+    puts("Que palabra quiere buscar?");
+    fflush(stdin);
+    gets(buff);
+
+    char *palabraClave = (char *) malloc((strlen(buff)+1)*sizeof(char));
+    strcpy(palabraClave,buff);
+    free(buff);
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (listaSinRealizar[i] != NULL)
+        {
+            if (strcmp((*(listaSinRealizar + i))->Descripcion,palabraClave) == 0)
+            {
+                return((*(listaSinRealizar + i)));
+            }
+        }
+        if (listaRealizada[i] != NULL)
+        {
+            if (strcmp((*(listaRealizada + i))->Descripcion,palabraClave) == 0)
+            {
+                return((*(listaRealizada + i)));
+            }
+        }
+        
+    }
+    free(palabraClave);
+}
+tarea* buscarPorID (tarea **listaRealizada,tarea **listaSinRealizar, int cantTareas){
+
+    int id;
+    puts("Que id desea buscar");
+    fflush(stdin);
+    scanf("%d",&id);
     if (listaRealizada!=NULL || listaSinRealizar!=NULL)
     {
         for (int i = 0; i < cantTareas; i++)
@@ -122,4 +157,3 @@ tarea* buscarTarea (tarea **listaRealizada,tarea **listaSinRealizar, int cantTar
             
         }
     }
-}
