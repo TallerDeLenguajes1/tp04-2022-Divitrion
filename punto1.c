@@ -10,8 +10,9 @@ int Duracion; // entre 10 – 100
 }typedef tarea;
 
 void cargarTareas(tarea **listaTareas, int cantTareas);
-void escribirTarea(tarea **lista, int cantTareas);
+void escribirTarea(tarea *lista);
 void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas);
+tarea* BuscarTarea(tarea **listaRealizada, tarea **listaSinRealizar, int cantTareas);
 
 
 int main()
@@ -28,6 +29,7 @@ int main()
     
     cargarTareas(listaTareas,cantTareas);
     mostrarTareas(listaTareas,cantTareas,tareasRealizadas);
+    escribirTarea(BuscarTarea(tareasRealizadas,listaTareas,cantTareas));
 
     getchar();
 
@@ -55,14 +57,9 @@ void cargarTareas(tarea **listaTareas, int cantTareas){
 void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas){
 
     int completada;
-    system("cls");
     for (int i = 0; i < cantTareas; i++)
     {
-        printf("----------Tarea numero %d----------\n",(*(listaTareas+i))->TareaID);
-        puts("-----------Descripcion-----------\n");
-        puts((*(listaTareas+i))->Descripcion);
-        printf("Duracion: %d\n",(*(listaTareas+i))->Duracion);
-        puts("-----------------------------------------");
+        escribirTarea(listaTareas[i]);
         puts("Esta tarea esta realizada? [1]Si, [0]No");
         scanf("%d",&completada);
 
@@ -81,24 +78,57 @@ void mostrarTareas(tarea **listaTareas, int cantTareas, tarea **tareasRealizadas
         
     }
     puts("-------------TAREAS REALIZADAS-------------\n");
-    escribirTarea(tareasRealizadas,cantTareas);
-
-    puts("-------------TAREAS SIN REALIZAR-------------\n");
-    escribirTarea(listaTareas,cantTareas);
-}
-
-void escribirTarea(tarea **lista, int cantTareas){
     for (int i = 0; i < cantTareas; i++)
     {
-        if (*(lista+i)!=NULL)
+        escribirTarea(tareasRealizadas[i]);
+    }
+
+    puts("-------------TAREAS SIN REALIZAR-------------\n");
+    for (int i = 0; i < cantTareas; i++)
+    {
+        escribirTarea(listaTareas[i]);
+    }
+}
+
+void escribirTarea(tarea *lista){
+    if (lista!=NULL)
+    {
+        printf("----------Tarea numero %d----------\n",lista->TareaID);
+        puts("-----------Descripcion-----------\n");
+        puts(lista->Descripcion);
+        printf("Duracion: %d\n",lista->Duracion);
+        puts("-----------------------------------------");
+    }
+}
+
+tarea* BuscarTarea(tarea **listaRealizada, tarea **listaSinRealizar, int cantTareas)
+{
+    char *buff=(char *) malloc(100*sizeof(char));
+
+    puts("Que palabra quiere buscar?");
+    fflush(stdin);
+    gets(buff);
+
+    char *palabraClave = (char *) malloc((strlen(buff)+1)*sizeof(char));
+    strcpy(palabraClave,buff);
+    free(buff);
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (listaSinRealizar[i] != NULL)
         {
-            printf("----------Tarea numero %d----------\n",(*(lista+i))->TareaID);
-            puts("-----------Descripcion-----------\n");
-            puts((*(lista+i))->Descripcion);
-            printf("Duracion: %d\n",(*(lista+i))->Duracion);
-            puts("-----------------------------------------");
+            if (strcmp((*(listaSinRealizar + i))->Descripcion,palabraClave) == 0)
+            {
+                return((*(listaSinRealizar + i)));
+            }
+        }
+        if (listaRealizada[i] != NULL)
+        {
+            if (strcmp((*(listaRealizada + i))->Descripcion,palabraClave) == 0)
+            {
+                return((*(listaRealizada + i)));
+            }
         }
         
     }
-    
+    free(palabraClave);
 }
